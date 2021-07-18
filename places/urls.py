@@ -1,7 +1,11 @@
 from django import urls
 from  django.urls import path
-from .views import places
+from .views import places, create_place, place, delete_place, edit_place
 
 urlpatterns = [
-    path('', places, name='places_list')
+    path('', places, name='places_list'),
+    path('create/', create_place, name='create-place'),
+    path('<int:id>/', place, name=place),
+    path('<int:id>/edit/', edit_place, name='edit-place'),
+    path('<int:id/delete/', delete_place, name='delete-place'),
 ]
