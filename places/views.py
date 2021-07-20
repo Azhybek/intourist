@@ -20,7 +20,7 @@ def create_place(request):
     place_form = PlaceForm()
     return render(request, 'places/form.html', {'place_form': place_form})
 
-def place(request):
+def place(request, id):
     place_object = Place.objects.get(id=id)
     return render(request, 'places/place.html', {'place_object': place_object})
 
