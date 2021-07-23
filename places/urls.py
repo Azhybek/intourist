@@ -7,5 +7,5 @@ urlpatterns = [
     path('create/', create_place, name='create_place'),
     path('<int:id>/', place, name='place'),
     path('<int:id>/edit/', edit_place, name='edit_place'),
-    path('<int:id/delete/', delete_place, name='delete_place'),
+    path('<int:id>/delete/', delete_place, name='delete_place'),
 ]
