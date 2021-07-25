@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
-from .models import  Place
-from .forms import PlaceForm
+from django.shortcuts import render, redirect, HttpResponse
+from django.views.generic import FormView
+from django.views.generic.detail import DetailView
+from .models import  Place, Feedback
+from .forms import PlaceForm, FeedbackFormView
 
 
 
@@ -21,8 +23,12 @@ def create_place(request):
     return render(request, 'places/form.html', {'place_form': place_form})
 
 def place(request, id):
-    place_object = Place.objects.get(id=id)
-    return render(request, 'places/place.html', {'place_object': place_object})
+    try:
+        place_object = Place.objects.get(id=id)
+        return render(request, 'places/place.html', {'place_object': place_object})
+    except Place.DoesNotExist as e:
+        return HttpResponse(f'Not found {e}', status=404)
+    
 
 def edit_place(request, id):
     place_object = Place.objects.get(id=id)
@@ -36,8 +42,21 @@ def edit_place(request, id):
     place_form = PlaceForm(instance=place_object)
     return render(request, 'places/form.html', {'place_form': place_form})
 
+
 def delete_place(request, id):
     place_object = Place.objects.get(id=id)
     place_object.delete()
     return redirect(places)
 
+class FeedbackView(FormView):
+    template_name = 'places/feedback_form.html'
+    form_class = FeedbackFormView
+    success_url = '/places/'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+class FeedbackDetailView(DetailView):
+    queryset = Feedback.objects.all()
+    template_name = 'places/feedback.html'
